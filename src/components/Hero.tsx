@@ -251,11 +251,11 @@ export function Hero() {
           transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-5 relative mt-10 lg:mt-0"
         >
-          <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
+          <div className="neon-card aspect-[9/16] mx-auto max-w-[340px] lg:max-w-[420px] relative lg:rotate-2 origin-bottom-left">
             {/* Mobile = light MP4 autoplay loop (small buffer = iOS-friendly).
-                Desktop = full-quality video that the scroll-scrub useEffect drives. */}
+                Desktop = full-quality all-keyframes video, scroll-scrub via useEffect. */}
             <video
-              src={asset("/videos/box-assembly-mobile.mp4")}
+              src={asset("/videos/pub-mobile.mp4")}
               autoPlay
               muted
               loop
@@ -265,7 +265,7 @@ export function Hero() {
             />
             <video
               ref={videoRef}
-              src={asset("/videos/box-assembly.mp4")}
+              src={asset("/videos/pub.mp4")}
               autoPlay
               muted
               loop
