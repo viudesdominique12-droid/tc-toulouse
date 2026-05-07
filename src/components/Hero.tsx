@@ -130,11 +130,13 @@ export function Hero() {
   const palmL = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const palmR = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
-  // "Page peel" — Hero shrinks and dims on the last 35% of its scroll range,
+  // "Page peel" — Hero shrinks and dims on the last 50% of its scroll range,
   // making it feel like the next section slides over a card-like Hero behind.
-  const heroScale = useTransform(scrollYProgress, [0.65, 1], [1, 0.92]);
-  const heroOpacity = useTransform(scrollYProgress, [0.65, 1], [1, 0.65]);
-  const heroRadius = useTransform(scrollYProgress, [0.65, 1], ["0px", "28px"]);
+  // Stronger values (0.85 scale, 0.5 opacity, 36px radius) so the effect is
+  // actually visible to the eye.
+  const heroScale = useTransform(scrollYProgress, [0.5, 1], [1, 0.85]);
+  const heroOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0.5]);
+  const heroRadius = useTransform(scrollYProgress, [0.5, 1], ["0px", "36px"]);
 
   return (
     <section
@@ -142,13 +144,18 @@ export function Hero() {
       ref={wrap}
       className="relative isolate min-h-[100svh] md:h-[280vh]"
     >
+      <div className="md:sticky md:top-0 min-h-[100svh] md:h-screen pt-24 md:pt-28">
+      {/* Inner motion wrapper — receives the scale/opacity/radius transforms.
+          Kept SEPARATE from the sticky element because transform: scale on a
+          sticky element can break sticky positioning in some browsers. */}
       <motion.div
-        className="md:sticky md:top-0 min-h-[100svh] md:h-screen md:overflow-hidden pt-24 md:pt-28"
+        className="relative h-full w-full md:overflow-hidden"
         style={{
           scale: heroScale,
           opacity: heroOpacity,
           borderRadius: heroRadius,
           transformOrigin: "center center",
+          willChange: "transform, opacity",
         }}
       >
       {/* Facade background — atmospheric, "viens chez nous" */}
@@ -329,6 +336,7 @@ export function Hero() {
         </motion.div>
       </div>
       </motion.div>
+      </div>
     </section>
   );
 }
