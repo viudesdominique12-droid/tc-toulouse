@@ -163,13 +163,12 @@ function TakeARideMobile() {
         transition={{ duration: 0.9 }}
         className="relative isolate min-h-[85svh] flex items-end overflow-hidden"
       >
-        <video
-          src={asset("/videos/pink-cadillac.mp4")}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
+        <img
+          src={asset("/videos/pink-cadillac.gif")}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
@@ -202,13 +201,12 @@ function TakeARideMobile() {
         transition={{ duration: 0.9 }}
         className="relative isolate min-h-[85svh] flex items-end overflow-hidden"
       >
-        <video
-          src={asset("/videos/pov-drive.mp4")}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
+        <img
+          src={asset("/videos/pov-drive.gif")}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/40 to-transparent" />

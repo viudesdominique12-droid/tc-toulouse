@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef } from "react";
 import { PalmTree, SunGradient } from "./Decor";
 import { asset } from "@/lib/asset";
+import { ResponsiveBg } from "./ResponsiveBg";
 
 export function Hero() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -251,6 +252,16 @@ export function Hero() {
           className="lg:col-span-5 relative mt-10 lg:mt-0"
         >
           <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
+            {/* Mobile = GIF (autoplay guaranteed, no iOS battle).
+                Desktop = video that the scroll-scrub useEffect drives. */}
+            <img
+              src={asset("/videos/box-assembly.gif")}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              className="md:hidden absolute inset-0 h-full w-full object-cover"
+            />
             <video
               ref={videoRef}
               src={asset("/videos/box-assembly.mp4")}
@@ -259,7 +270,7 @@ export function Hero() {
               loop
               playsInline
               preload="auto"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="hidden md:block absolute inset-0 h-full w-full object-cover"
             />
             <div className="grain" />
             <div className="scanlines" />

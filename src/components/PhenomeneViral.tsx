@@ -3,6 +3,7 @@
 import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
+import { ResponsiveBg } from "./ResponsiveBg";
 
 function AnimatedCounter({
   value,
@@ -64,13 +65,9 @@ export function PhenomeneViral() {
         style={{ x: bgX, scale: bgScale }}
         className="absolute inset-0 -z-10"
       >
-        <video
-          src={asset("/videos/pink-cadillac.mp4")}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
+        <ResponsiveBg
+          videoSrc={asset("/videos/pink-cadillac.mp4")}
+          gifSrc={asset("/videos/pink-cadillac.gif")}
           className="h-full w-full object-cover opacity-60 md:opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/40 to-ink" />

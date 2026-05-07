@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { asset } from "@/lib/asset";
+import { ResponsiveBg } from "./ResponsiveBg";
 
 export function Footer() {
   const wrap = useRef<HTMLElement>(null);
@@ -24,13 +25,9 @@ export function Footer() {
         style={{ x: videoX, scale: videoScale }}
         className="absolute inset-0 -z-10"
       >
-        <video
-          src={asset("/videos/pov-drive.mp4")}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
+        <ResponsiveBg
+          videoSrc={asset("/videos/pov-drive.mp4")}
+          gifSrc={asset("/videos/pov-drive.gif")}
           className="h-full w-full object-cover opacity-70 md:opacity-55 md:mix-blend-luminosity"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-violet via-violet/40 to-transparent" />
