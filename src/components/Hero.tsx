@@ -108,7 +108,7 @@ export function Hero() {
       ref={wrap}
       className="relative min-h-[100svh] md:h-[280vh]"
     >
-      <div className="md:sticky md:top-0 min-h-[100svh] md:h-screen overflow-hidden pt-24 md:pt-28">
+      <div className="md:sticky md:top-0 min-h-[100svh] md:h-screen md:overflow-hidden pt-24 md:pt-28">
       {/* Facade background — atmospheric, "viens chez nous" */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <img
@@ -227,7 +227,9 @@ export function Hero() {
             <video
               ref={videoRef}
               src={asset("/videos/box-assembly.mp4")}
+              autoPlay
               muted
+              loop
               playsInline
               preload="auto"
               className="absolute inset-0 h-full w-full object-cover"

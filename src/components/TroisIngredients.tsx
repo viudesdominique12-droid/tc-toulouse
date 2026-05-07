@@ -33,7 +33,7 @@ export function TroisIngredients() {
   return (
     <section
       id="produit"
-      className="relative md:sticky md:top-0 min-h-[100svh] md:min-h-screen bg-kraft overflow-hidden py-20 md:py-24"
+      className="relative md:sticky md:top-0 min-h-[100svh] md:min-h-screen bg-kraft md:overflow-hidden py-20 md:py-24"
       style={{
         zIndex: 3,
         boxShadow: "0 -3px 0 rgba(201, 179, 147, 1), 0 -28px 70px rgba(0, 0, 0, 0.6)",
