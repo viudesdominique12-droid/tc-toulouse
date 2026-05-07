@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 const links = [
   { href: "#produit", label: "Le crousty" },
   { href: "#viral", label: "Phénomène" },
@@ -9,110 +7,57 @@ const links = [
   { href: "#restos", label: "Notre resto" },
 ];
 
-type Variant = "transparent" | "ink" | "turquoise";
-
 export function Nav() {
-  const [variant, setVariant] = useState<Variant>("transparent");
-
-  // Track scroll position for the "ink solid" treatment
-  useEffect(() => {
-    const onScroll = () => {
-      // Default: transparent at top, ink-solid once user scrolled
-      // (turquoise overrides this when over the showcase section)
-      setVariant((prev) =>
-        prev === "turquoise"
-          ? prev
-          : window.scrollY > 24
-            ? "ink"
-            : "transparent"
-      );
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Track when the turquoise section (Showcase Produit) is "behind" the nav
-  useEffect(() => {
-    const showcase = document.getElementById("showcase");
-    if (!showcase) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.45) {
-          setVariant("turquoise");
-        } else {
-          setVariant(window.scrollY > 24 ? "ink" : "transparent");
-        }
-      },
-      {
-        // Top below nav (64px), bottom mid-screen → "active" when section
-        // covers the upper half
-        rootMargin: "-64px 0px -45% 0px",
-        threshold: [0, 0.45, 0.7, 1],
-      }
-    );
-
-    observer.observe(showcase);
-    return () => observer.disconnect();
-  }, []);
-
-  const isTurquoise = variant === "turquoise";
-  const isInk = variant === "ink";
-
   return (
-    <header
-      className="fixed inset-x-0 top-0 z-50"
-      style={{
-        background: isTurquoise
-          ? "linear-gradient(180deg, rgba(91, 201, 229, 0.95) 0%, rgba(168, 225, 240, 0.88) 100%)"
-          : isInk
-            ? "rgba(10, 4, 20, 0.85)"
-            : "transparent",
-        backdropFilter: isTurquoise || isInk ? "blur(14px)" : "blur(0px)",
-        WebkitBackdropFilter: isTurquoise || isInk ? "blur(14px)" : "blur(0px)",
-        borderBottom: isTurquoise
-          ? "1px solid rgba(43, 168, 199, 0.4)"
-          : isInk
-            ? "1px solid var(--color-line)"
-            : "1px solid transparent",
-        boxShadow: isTurquoise
-          ? "0 8px 28px -10px rgba(43, 168, 199, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4)"
-          : "none",
-        transition: "background 400ms ease, backdrop-filter 400ms ease, border-color 400ms ease, box-shadow 400ms ease",
-      }}
-    >
-      <div className="container-page flex h-16 items-center justify-between">
-        <a href="#top" className="flex items-center gap-2 group">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[calc(100%-1.25rem)]">
+      <div
+        className="flex items-center gap-3 md:gap-7 h-12 md:h-14 pl-5 pr-2 md:pl-6 md:pr-2 rounded-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(91, 201, 229, 0.97) 0%, rgba(168, 225, 240, 0.93) 100%)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          boxShadow:
+            "0 12px 36px -12px rgba(43, 168, 199, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45)",
+        }}
+      >
+        {/* Logo */}
+        <a href="#top" className="flex items-center gap-1.5 shrink-0">
           <span
-            className="heading-script text-3xl leading-none"
-            style={{
-              color: isTurquoise ? "#C71585" : "var(--color-magenta)",
-              transition: "color 400ms ease",
-            }}
+            className="heading-script text-2xl md:text-3xl leading-none"
+            style={{ color: "#C71585" }}
           >
             Tasty
           </span>
           <span
-            className="heading-display text-xl tracking-wider"
-            style={{
-              color: isTurquoise ? "#1A0B2E" : "var(--color-cream)",
-              transition: "color 400ms ease",
-            }}
+            className="heading-display text-sm md:text-base tracking-wider"
+            style={{ color: "#1A0B2E" }}
           >
             Crousty
           </span>
         </a>
 
-        <nav className="hidden md:flex items-center gap-7 text-sm">
+        {/* Desktop nav links */}
+        <nav className="hidden md:flex items-center gap-5 text-sm">
           {links.map((l) => (
-            <NavLink key={l.href} href={l.href} isTurquoise={isTurquoise}>
+            <NavLink key={l.href} href={l.href}>
               {l.label}
             </NavLink>
           ))}
         </nav>
 
-        <a href="#restos" className="btn-primary text-xs md:text-sm">
+        {/* CTA */}
+        <a
+          href="#restos"
+          className="shrink-0 inline-flex items-center justify-center rounded-full font-semibold text-xs md:text-sm transition-all duration-200 h-8 md:h-10 px-4 md:px-5"
+          style={{
+            background: "rgba(20, 9, 31, 0.95)",
+            color: "var(--color-cream)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            boxShadow:
+              "0 4px 14px -6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
+          }}
+        >
           Voir le resto
         </a>
       </div>
@@ -122,30 +67,22 @@ export function Nav() {
 
 function NavLink({
   href,
-  isTurquoise,
   children,
 }: {
   href: string;
-  isTurquoise: boolean;
   children: React.ReactNode;
 }) {
-  const [hover, setHover] = useState(false);
-
-  const baseColor = isTurquoise
-    ? "rgba(26, 11, 46, 0.78)"
-    : "rgba(245, 230, 201, 0.7)";
-  const hoverColor = isTurquoise ? "#C71585" : "var(--color-cyan)";
-
   return (
     <a
       href={href}
-      className="font-semibold"
-      style={{
-        color: hover ? hoverColor : baseColor,
-        transition: "color 200ms ease",
+      className="font-semibold transition-colors duration-200"
+      style={{ color: "rgba(26, 11, 46, 0.78)" }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.color = "#C71585";
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.color = "rgba(26, 11, 46, 0.78)";
+      }}
     >
       {children}
     </a>
