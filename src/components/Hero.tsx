@@ -23,8 +23,35 @@ export function Hero() {
     if (isTouch) {
       v.muted = true;
       v.loop = true;
+      v.setAttribute("playsinline", "");
       v.play().catch(() => {});
-      return;
+
+      // iOS Safari likes to pause videos when they scroll out of viewport.
+      // Resume play whenever the video becomes visible again, and re-kick on
+      // any user gesture (tap on body) for the strictest autoplay policies.
+      const obs = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting && v.paused) {
+              v.play().catch(() => {});
+            }
+          }
+        },
+        { threshold: 0.05 }
+      );
+      obs.observe(v);
+
+      const onGesture = () => {
+        if (v.paused) v.play().catch(() => {});
+      };
+      window.addEventListener("touchstart", onGesture, { passive: true, once: true });
+      window.addEventListener("click", onGesture, { once: true });
+
+      return () => {
+        obs.disconnect();
+        window.removeEventListener("touchstart", onGesture);
+        window.removeEventListener("click", onGesture);
+      };
     }
 
     // Desktop scrub: needs all-keyframes mp4 + buffered video for smooth seeks.
@@ -218,12 +245,12 @@ export function Hero() {
 
         {/* Right: video card with overhang and tilt */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94, rotate: 4 }}
-          animate={{ opacity: 1, scale: 1, rotate: 2 }}
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="lg:col-span-5 relative origin-bottom-left"
+          className="lg:col-span-5 relative mt-10 lg:mt-0"
         >
-          <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative">
+          <div className="neon-card aspect-video sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
             <video
               ref={videoRef}
               src={asset("/videos/box-assembly.mp4")}
@@ -251,12 +278,12 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Overlapping sticker — breaks grid */}
+          {/* Overlapping sticker — kept inside the card on mobile to avoid touching text */}
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotate: -25 }}
             animate={{ opacity: 1, scale: 1, rotate: -12 }}
             transition={{ duration: 0.8, delay: 1, type: "spring", bounce: 0.4 }}
-            className="absolute -top-6 -left-12 md:-left-16 z-20 bg-cyan text-ink heading-display text-xl md:text-2xl px-5 py-3 rounded-2xl shadow-neon-cyan"
+            className="absolute top-2 -left-2 md:-top-6 md:-left-16 z-20 bg-cyan text-ink heading-display text-base md:text-2xl px-3 md:px-5 py-1.5 md:py-3 rounded-2xl"
             style={{ boxShadow: "var(--shadow-neon-cyan)" }}
           >
             Summer
@@ -268,7 +295,7 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.5, rotate: 30 }}
             animate={{ opacity: 1, scale: 1, rotate: 14 }}
             transition={{ duration: 0.8, delay: 1.15, type: "spring", bounce: 0.4 }}
-            className="absolute -bottom-4 -right-6 md:-right-10 z-20 bg-ink border-2 border-magenta text-magenta heading-display text-base md:text-lg px-4 py-2.5 rounded-full"
+            className="absolute -bottom-2 right-2 md:-bottom-4 md:-right-10 z-20 bg-ink border-2 border-magenta text-magenta heading-display text-sm md:text-lg px-3 md:px-4 py-1.5 md:py-2.5 rounded-full"
             style={{ boxShadow: "var(--shadow-neon-magenta)" }}
           >
             +130M vues

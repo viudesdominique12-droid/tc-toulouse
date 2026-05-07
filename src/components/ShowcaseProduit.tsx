@@ -8,7 +8,7 @@ export function ShowcaseProduit() {
     <section
       id="showcase"
       data-nav-variant="turquoise"
-      className="relative md:sticky md:top-0 min-h-[100svh] md:min-h-screen bg-turquoise-soft md:overflow-hidden flex items-center py-20 md:py-24"
+      className="sticky top-0 min-h-[100svh] md:min-h-screen bg-turquoise-soft md:overflow-hidden flex items-center py-20 md:py-24"
       style={{
         zIndex: 2,
         boxShadow: "0 -3px 0 rgba(91, 201, 229, 0.7), 0 -28px 70px rgba(0, 0, 0, 0.5)",
