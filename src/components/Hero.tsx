@@ -235,7 +235,7 @@ export function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.1 }}
-            className="mt-12 flex items-center gap-4 text-sm text-cream/60 font-mono"
+            className="mt-12 hidden md:flex items-center gap-4 text-sm text-cream/60 font-mono"
           >
             <span className="h-2.5 w-2.5 rounded-full bg-magenta pulse-ring" />
             <span>
@@ -290,12 +290,12 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Overlapping sticker — kept inside the card on mobile to avoid touching text */}
+          {/* Summer Vibes sticker — desktop only */}
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotate: -25 }}
             animate={{ opacity: 1, scale: 1, rotate: -12 }}
             transition={{ duration: 0.8, delay: 1, type: "spring", bounce: 0.4 }}
-            className="absolute top-2 -left-2 md:-top-6 md:-left-16 z-20 bg-cyan text-ink heading-display text-base md:text-2xl px-3 md:px-5 py-1.5 md:py-3 rounded-2xl"
+            className="hidden md:block absolute md:-top-6 md:-left-16 z-20 bg-cyan text-ink heading-display md:text-2xl md:px-5 md:py-3 rounded-2xl"
             style={{ boxShadow: "var(--shadow-neon-cyan)" }}
           >
             Summer
