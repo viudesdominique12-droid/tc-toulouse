@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anton, Allura, Inter, JetBrains_Mono } from "next/font/google";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Cursor } from "@/components/Cursor";
+import { VideoAutoplay } from "@/components/VideoAutoplay";
 import "./globals.css";
 
 const anton = Anton({
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="fr" className={`${anton.variable} ${allura.variable} ${inter.variable} ${jetbrains.variable}`}>
       <body>
         <SmoothScroll />
+        <VideoAutoplay />
         <Cursor />
         {children}
       </body>

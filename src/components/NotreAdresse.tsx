@@ -20,7 +20,7 @@ export function NotreAdresse() {
   return (
     <section
       id="restos"
-      className="relative py-24 md:py-32 bg-ink overflow-hidden border-t border-line"
+      className="relative isolate py-24 md:py-32 bg-ink overflow-hidden border-t border-line"
     >
       {/* Facade image as atmospheric background */}
       <div className="absolute inset-0 -z-10">

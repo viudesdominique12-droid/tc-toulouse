@@ -17,7 +17,7 @@ export function Footer() {
   return (
     <footer
       ref={wrap}
-      className="relative pt-24 md:pt-32 pb-10 overflow-hidden bg-sunset border-t border-line"
+      className="relative isolate pt-24 md:pt-32 pb-10 overflow-hidden bg-sunset border-t border-line"
     >
       {/* POV Drive ambient — visible (50%) blended with sunset */}
       <motion.div

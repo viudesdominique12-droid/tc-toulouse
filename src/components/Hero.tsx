@@ -133,7 +133,7 @@ export function Hero() {
     <section
       id="top"
       ref={wrap}
-      className="relative min-h-[100svh] md:h-[280vh]"
+      className="relative isolate min-h-[100svh] md:h-[280vh]"
     >
       <div className="md:sticky md:top-0 min-h-[100svh] md:h-screen md:overflow-hidden pt-24 md:pt-28">
       {/* Facade background — atmospheric, "viens chez nous" */}

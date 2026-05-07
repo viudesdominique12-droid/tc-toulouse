@@ -53,7 +53,7 @@ export function PhenomeneViral() {
     <section
       id="viral"
       ref={wrap}
-      className="sticky top-0 min-h-[100svh] md:min-h-screen bg-night md:overflow-hidden flex items-center"
+      className="sticky top-0 isolate min-h-[100svh] md:min-h-screen bg-night md:overflow-hidden flex items-center"
       style={{
         zIndex: 1,
         boxShadow: "0 -1px 0 rgba(255, 46, 147, 0.4), 0 -20px 60px rgba(0, 0, 0, 0.6)",
