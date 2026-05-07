@@ -130,13 +130,27 @@ export function Hero() {
   const palmL = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const palmR = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
+  // "Page peel" — Hero shrinks and dims on the last 35% of its scroll range,
+  // making it feel like the next section slides over a card-like Hero behind.
+  const heroScale = useTransform(scrollYProgress, [0.65, 1], [1, 0.92]);
+  const heroOpacity = useTransform(scrollYProgress, [0.65, 1], [1, 0.65]);
+  const heroRadius = useTransform(scrollYProgress, [0.65, 1], ["0px", "28px"]);
+
   return (
     <section
       id="top"
       ref={wrap}
       className="relative isolate min-h-[100svh] md:h-[280vh]"
     >
-      <div className="md:sticky md:top-0 min-h-[100svh] md:h-screen md:overflow-hidden pt-24 md:pt-28">
+      <motion.div
+        className="md:sticky md:top-0 min-h-[100svh] md:h-screen md:overflow-hidden pt-24 md:pt-28"
+        style={{
+          scale: heroScale,
+          opacity: heroOpacity,
+          borderRadius: heroRadius,
+          transformOrigin: "center center",
+        }}
+      >
       {/* Facade background — atmospheric, "viens chez nous" */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <img
@@ -314,7 +328,7 @@ export function Hero() {
           </motion.div>
         </motion.div>
       </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
