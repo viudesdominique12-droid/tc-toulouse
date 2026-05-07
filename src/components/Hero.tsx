@@ -130,13 +130,13 @@ export function Hero() {
   const palmL = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const palmR = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
-  // "Page peel" — Hero shrinks and dims on the last 50% of its scroll range,
-  // making it feel like the next section slides over a card-like Hero behind.
-  // Stronger values (0.85 scale, 0.5 opacity, 36px radius) so the effect is
-  // actually visible to the eye.
-  const heroScale = useTransform(scrollYProgress, [0.5, 1], [1, 0.85]);
-  const heroOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0.5]);
-  const heroRadius = useTransform(scrollYProgress, [0.5, 1], ["0px", "36px"]);
+  // "TikTok-comments peel" — the Hero shrinks dramatically into a mini-card
+  // in the top-right corner, like the TikTok video that tucks into a corner
+  // when you open the comments. Values are intentionally aggressive so the
+  // effect is unmistakable.
+  const heroScale = useTransform(scrollYProgress, [0.4, 0.95], [1, 0.4]);
+  const heroOpacity = useTransform(scrollYProgress, [0.4, 0.95], [1, 1]);
+  const heroRadius = useTransform(scrollYProgress, [0.4, 0.95], ["0px", "24px"]);
 
   return (
     <section
@@ -154,8 +154,8 @@ export function Hero() {
           scale: heroScale,
           opacity: heroOpacity,
           borderRadius: heroRadius,
-          transformOrigin: "center center",
-          willChange: "transform, opacity",
+          transformOrigin: "top right",
+          willChange: "transform, opacity, border-radius",
         }}
       >
       {/* Facade background — atmospheric, "viens chez nous" */}
