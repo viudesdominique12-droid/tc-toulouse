@@ -21,44 +21,75 @@ export function Hero() {
       window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
     if (isTouch) {
-      // Mobile: just autoplay loop, no scrub
       v.muted = true;
       v.loop = true;
       v.play().catch(() => {});
       return;
     }
 
-    // Desktop: ensure browser allows seeking by kicking off play then immediate pause
+    // Desktop scrub: needs all-keyframes mp4 + buffered video for smooth seeks.
     v.loop = false;
     v.muted = true;
-    const kick = v.play().catch(() => {});
-    Promise.resolve(kick).then(() => {
-      try { v.pause(); } catch {}
-    });
+    v.preload = "auto";
+
+    // Kick play to authorize seeks, then pause once metadata loaded
+    v.play().then(() => v.pause()).catch(() => {});
+
+    // Wait until the browser says it can play the whole thing before scrubbing,
+    // otherwise seeks block on network and look stuck.
+    let canScrub = v.readyState >= 4; // HAVE_ENOUGH_DATA
+    const onReady = () => { canScrub = true; };
+    v.addEventListener("canplaythrough", onReady);
+    v.addEventListener("loadeddata", onReady);
 
     let raf = 0;
-    let lastT = -1;
+    let lastSetT = -1;
+    let lastSeekStamp = 0;
+    let pendingProgress = -1;
+    let isSeeking = false;
+
+    const onSeeking = () => { isSeeking = true; };
+    const onSeeked = () => { isSeeking = false; };
+    v.addEventListener("seeking", onSeeking);
+    v.addEventListener("seeked", onSeeked);
+
+    const applySeek = (now: number) => {
+      const dur = v.duration;
+      if (!dur || isNaN(dur) || pendingProgress < 0) return;
+      const t = pendingProgress * dur;
+      // Skip if change too small or browser still seeking previous
+      if (isSeeking) return;
+      if (Math.abs(t - lastSetT) < 0.04) return;
+      try {
+        v.currentTime = t;
+        lastSetT = t;
+        lastSeekStamp = now;
+      } catch {}
+    };
+
     const tick = () => {
       const rect = w.getBoundingClientRect();
       const sectionH = w.offsetHeight;
       const scrolled = -rect.top;
       const range = Math.max(1, sectionH - window.innerHeight);
-      const progress = Math.max(0, Math.min(1, scrolled / range));
-      const dur = v.duration;
-      if (dur && !isNaN(dur)) {
-        const t = progress * dur;
-        if (Math.abs(t - lastT) > 0.02) {
-          try {
-            v.currentTime = t;
-            lastT = t;
-          } catch {}
-        }
+      pendingProgress = Math.max(0, Math.min(1, scrolled / range));
+
+      if (canScrub) {
+        const now = performance.now();
+        // Throttle: at most ~25 seeks/s — gives the decoder time to render
+        if (now - lastSeekStamp >= 40) applySeek(now);
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
 
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      v.removeEventListener("canplaythrough", onReady);
+      v.removeEventListener("loadeddata", onReady);
+      v.removeEventListener("seeking", onSeeking);
+      v.removeEventListener("seeked", onSeeked);
+    };
   }, []);
 
   // Parallax for decor + headline (Motion-based, lighter)
