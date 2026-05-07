@@ -149,81 +149,88 @@ function PhaseDot({
   );
 }
 
-/* ---------------- MOBILE — flow render, two stacked videos --------------- */
+/* ---------------- MOBILE — two full-bg cinematic chapters ---------------- */
+/* Same ambiance as desktop: video lives behind text, not in a tiny card.    */
 
 function TakeARideMobile() {
   return (
-    <section
-      id="ride"
-      className="relative bg-ink border-y border-line py-16 px-4"
-    >
-      <div className="container-page">
-        <span className="eyebrow text-cyan">Take a ride</span>
-        <h2 className="heading-display mt-4 text-[14vw] text-cream leading-[0.88] text-balance">
-          Cruise.
-          <br />
-          <span className="heading-script text-magenta block text-[18vw] -mt-2 ml-3">
-            Eat.
-          </span>
-          <span className="block text-cyan -mt-1">Repeat.</span>
-        </h2>
-        <p className="mt-6 text-cream/80 text-base leading-relaxed max-w-md">
-          Le crousty est un mood. Une signature. Un état d&apos;esprit.
-          <span className="text-cream"> Summer Vibes Only — 365 jours par an.</span>
-        </p>
+    <section id="ride" className="relative bg-ink border-y border-line">
+      {/* Chapter 1 — Pink Cadillac as full background */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9 }}
+        className="relative isolate min-h-[85svh] flex items-end overflow-hidden"
+      >
+        <video
+          src={asset("/videos/pink-cadillac.mp4")}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/50 via-transparent to-transparent" />
+        <div className="grain absolute inset-0 -z-10 opacity-50" />
+        <div className="scanlines absolute inset-0 -z-10" />
 
-        <div className="mt-10 space-y-5">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="aspect-video relative overflow-hidden rounded-2xl border border-line"
-          >
-            <video
-              src={asset("/videos/pink-cadillac.mp4")}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 tag">
-              <span className="h-1.5 w-1.5 rounded-full bg-magenta animate-pulse" />
-              Cadillac
-            </div>
-            <div className="grain opacity-40" />
-            <div className="scanlines" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="aspect-video relative overflow-hidden rounded-2xl border border-line"
-          >
-            <video
-              src={asset("/videos/pov-drive.mp4")}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 tag">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-pulse" />
-              POV
-            </div>
-            <div className="grain opacity-40" />
-            <div className="scanlines" />
-          </motion.div>
+        <div className="container-page py-16 relative z-10">
+          <span className="eyebrow text-cyan">Take a ride</span>
+          <h2 className="heading-display mt-4 text-[18vw] text-cream leading-[0.88] text-balance drop-shadow-lg">
+            Cruise.
+            <br />
+            <span className="heading-script text-magenta block text-[22vw] -mt-2 ml-2">
+              Eat.
+            </span>
+          </h2>
         </div>
-      </div>
+
+        <div className="absolute top-5 right-5 tag z-10">
+          <span className="h-1.5 w-1.5 rounded-full bg-magenta animate-pulse" />
+          Pink Cadillac
+        </div>
+      </motion.div>
+
+      {/* Chapter 2 — POV Drive as full background */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9 }}
+        className="relative isolate min-h-[85svh] flex items-end overflow-hidden"
+      >
+        <video
+          src={asset("/videos/pov-drive.mp4")}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-l from-ink/50 via-transparent to-transparent" />
+        <div className="grain absolute inset-0 -z-10 opacity-50" />
+        <div className="scanlines absolute inset-0 -z-10" />
+
+        <div className="container-page py-16 relative z-10 text-right">
+          <h2 className="heading-display text-[24vw] text-cyan leading-[0.85] drop-shadow-lg">
+            Repeat.
+          </h2>
+          <p className="mt-5 text-cream/90 text-base leading-relaxed max-w-md ml-auto">
+            Le crousty est un mood. Une signature. Un état d&apos;esprit.
+            <span className="text-cream font-semibold"> Summer Vibes Only — 365 jours par an.</span>
+          </p>
+        </div>
+
+        <div className="absolute top-5 left-5 tag z-10">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan animate-pulse" />
+          POV Drive
+        </div>
+      </motion.div>
     </section>
   );
 }

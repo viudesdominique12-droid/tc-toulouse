@@ -250,7 +250,7 @@ export function Hero() {
           transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-5 relative mt-10 lg:mt-0"
         >
-          <div className="neon-card aspect-video sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
+          <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
             <video
               ref={videoRef}
               src={asset("/videos/box-assembly.mp4")}

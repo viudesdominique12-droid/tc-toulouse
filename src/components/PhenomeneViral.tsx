@@ -71,7 +71,7 @@ export function PhenomeneViral() {
           loop
           playsInline
           preload="metadata"
-          className="h-full w-full object-cover opacity-50"
+          className="h-full w-full object-cover opacity-60 md:opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/40 to-ink" />
         <div className="grain" />

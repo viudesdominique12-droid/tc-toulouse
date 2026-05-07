@@ -31,7 +31,7 @@ export function Footer() {
           loop
           playsInline
           preload="metadata"
-          className="h-full w-full object-cover opacity-55 mix-blend-luminosity"
+          className="h-full w-full object-cover opacity-70 md:opacity-55 md:mix-blend-luminosity"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-violet via-violet/40 to-transparent" />
         <div className="grain" />
