@@ -252,14 +252,15 @@ export function Hero() {
           className="lg:col-span-5 relative mt-10 lg:mt-0"
         >
           <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative lg:rotate-2 origin-bottom-left">
-            {/* Mobile = GIF (autoplay guaranteed, no iOS battle).
-                Desktop = video that the scroll-scrub useEffect drives. */}
-            <img
-              src={asset("/videos/box-assembly.gif")}
-              alt=""
-              aria-hidden
-              loading="lazy"
-              decoding="async"
+            {/* Mobile = light MP4 autoplay loop (small buffer = iOS-friendly).
+                Desktop = full-quality video that the scroll-scrub useEffect drives. */}
+            <video
+              src={asset("/videos/box-assembly-mobile.mp4")}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
               className="md:hidden absolute inset-0 h-full w-full object-cover"
             />
             <video

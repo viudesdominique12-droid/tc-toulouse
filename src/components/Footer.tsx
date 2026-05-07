@@ -27,7 +27,7 @@ export function Footer() {
       >
         <ResponsiveBg
           videoSrc={asset("/videos/pov-drive.mp4")}
-          gifSrc={asset("/videos/pov-drive.gif")}
+          mobileVideoSrc={asset("/videos/pov-drive-mobile.mp4")}
           className="h-full w-full object-cover opacity-70 md:opacity-55 md:mix-blend-luminosity"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-violet via-violet/40 to-transparent" />

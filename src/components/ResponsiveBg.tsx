@@ -4,61 +4,43 @@ import { useEffect, useState } from "react";
 import type { CSSProperties, VideoHTMLAttributes } from "react";
 
 /**
- * Renders a <video> on desktop and a <img> (animated GIF) on mobile.
+ * Renders the same <video>, but with a mobile-optimised source on small
+ * screens (max-width: 767px). This keeps the video pipeline (full quality,
+ * proper codec, no GIF compression artefacts) while serving a lighter
+ * buffer on mobile networks — small buffers are key for iOS autoplay.
  *
- * Why: iOS Safari frequently refuses to autoplay video even with the right
- * attributes (Low Power Mode, strict autoplay policies, off-screen-at-load
- * blocking, decoder pool limits when several videos compete). An animated
- * GIF is rendered by the image pipeline — it always plays, no user gesture
- * needed, no decoder limits, and the browser pauses it automatically when
- * out of viewport.
- *
- * Mobile = (max-width: 767px) — touch-only treatment, desktop keeps the
- * cinematic video.
+ * Mobile MP4 = 720p, CRF 25, no audio, faststart (~700 KB - 2 MB).
+ * Desktop MP4 = full quality original.
  */
 export function ResponsiveBg({
   videoSrc,
-  gifSrc,
+  mobileVideoSrc,
   className,
   style,
   videoProps,
 }: {
   videoSrc: string;
-  gifSrc: string;
+  mobileVideoSrc: string;
   className?: string;
   style?: CSSProperties;
   videoProps?: Omit<VideoHTMLAttributes<HTMLVideoElement>, "src" | "className" | "style">;
 }) {
-  // Default to "video" so SSR / first paint = desktop-friendly. Flips to
-  // "gif" once we know we're on a small screen.
-  const [mode, setMode] = useState<"video" | "gif">("video");
+  // SSR fallback = desktop. Switches at hydration if narrow viewport.
+  const [src, setSrc] = useState<string>(videoSrc);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 767px)");
-    setMode(mq.matches ? "gif" : "video");
-    const update = (e: MediaQueryListEvent) => setMode(e.matches ? "gif" : "video");
+    setSrc(mq.matches ? mobileVideoSrc : videoSrc);
+    const update = (e: MediaQueryListEvent) =>
+      setSrc(e.matches ? mobileVideoSrc : videoSrc);
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
-  }, []);
-
-  if (mode === "gif") {
-    return (
-      <img
-        src={gifSrc}
-        alt=""
-        aria-hidden
-        loading="lazy"
-        decoding="async"
-        className={className}
-        style={style}
-      />
-    );
-  }
+  }, [videoSrc, mobileVideoSrc]);
 
   return (
     <video
-      src={videoSrc}
+      src={src}
       autoPlay
       muted
       loop

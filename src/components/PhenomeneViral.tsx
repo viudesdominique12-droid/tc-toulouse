@@ -67,7 +67,7 @@ export function PhenomeneViral() {
       >
         <ResponsiveBg
           videoSrc={asset("/videos/pink-cadillac.mp4")}
-          gifSrc={asset("/videos/pink-cadillac.gif")}
+          mobileVideoSrc={asset("/videos/pink-cadillac-mobile.mp4")}
           className="h-full w-full object-cover opacity-60 md:opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/40 to-ink" />
