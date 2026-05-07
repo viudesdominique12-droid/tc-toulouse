@@ -3,20 +3,26 @@
 import { useEffect } from "react";
 
 /**
- * Mobile / iOS autoplay unlock + resume.
+ * Mobile / iOS autoplay strategy.
  *
- * iOS Safari (and Chrome Android in some configs) refuses to autoplay video
- * even with `muted playsInline autoplay` HTML attributes. The most reliable
- * pattern is to:
- *   1. Try to play() every <video> on mount.
- *   2. On the first user gesture (touchstart / click), force play() on every
- *      paused video — this is universally accepted as a "user-initiated"
- *      action.
- *   3. When the tab becomes visible again, retry.
- *   4. Use IntersectionObserver to resume any video that scrolls back into
- *      view (iOS often pauses out-of-view videos to save power).
+ * Why this is hard on iOS:
+ *  - iOS Safari only honours the `autoplay` HTML attribute for videos that
+ *    are in the viewport at parse time. Off-screen videos are silent.
+ *  - iOS limits the number of concurrent decoded videos. Pausing the ones
+ *    out-of-view is mandatory for the visible ones to play smoothly.
+ *  - Some Low Power / data-saving modes block autoplay entirely until a
+ *    real user gesture happens.
  *
- * No-op on desktop where browsers honour the autoplay attribute.
+ * This component does:
+ *   1. On mount + after hydration, try play() on the videos currently in
+ *      the viewport.
+ *   2. On the first touch / click anywhere, retry play() on visible videos.
+ *   3. IntersectionObserver:
+ *        - when a video enters the viewport → play()
+ *        - when it leaves → pause()
+ *   4. On visibility change (tab back to foreground), retry visible.
+ *
+ * No-op on desktop where browsers honour the autoplay attribute as is.
  */
 export function VideoAutoplay() {
   useEffect(() => {
@@ -24,49 +30,68 @@ export function VideoAutoplay() {
     const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
     if (!isTouch) return;
 
-    const playAll = () => {
-      document.querySelectorAll<HTMLVideoElement>("video").forEach((v) => {
-        if (v.paused) {
-          v.play().catch(() => {});
-        }
-      });
+    const isInViewport = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0 && r.left < window.innerWidth && r.right > 0;
     };
 
-    // Wait one frame for hydration so all <video> elements are mounted
-    const initial = window.requestAnimationFrame(() => playAll());
-
-    const onGesture = () => playAll();
-    const onVisibility = () => {
-      if (document.visibilityState === "visible") playAll();
+    const playIfVisible = (v: HTMLVideoElement) => {
+      if (!v.paused) return;
+      if (isInViewport(v)) {
+        v.play().catch(() => {});
+      }
     };
 
-    window.addEventListener("touchstart", onGesture, { passive: true });
-    window.addEventListener("click", onGesture);
-    document.addEventListener("visibilitychange", onVisibility);
+    const playAllVisible = () => {
+      document.querySelectorAll<HTMLVideoElement>("video").forEach(playIfVisible);
+    };
 
-    // Resume any video re-entering the viewport
+    // IntersectionObserver: drive playback by viewport visibility
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           const v = e.target as HTMLVideoElement;
-          if (e.isIntersecting && v.paused) {
-            v.play().catch(() => {});
+          if (e.isIntersecting) {
+            if (v.paused) v.play().catch(() => {});
+          } else {
+            if (!v.paused) {
+              try { v.pause(); } catch {}
+            }
           }
         }
       },
-      { threshold: 0.05 }
+      { threshold: 0.15 }
     );
 
+    let observedSet = new WeakSet<HTMLVideoElement>();
     const observeAll = () => {
-      document.querySelectorAll<HTMLVideoElement>("video").forEach((v) => obs.observe(v));
+      document.querySelectorAll<HTMLVideoElement>("video").forEach((v) => {
+        if (!observedSet.has(v)) {
+          obs.observe(v);
+          observedSet.add(v);
+        }
+      });
     };
-    observeAll();
-    // Re-observe after first paint in case some videos rendered late
-    const reobserve = window.setTimeout(observeAll, 1000);
+
+    // Try first paint, then retry as videos hydrate
+    const t1 = window.setTimeout(() => { observeAll(); playAllVisible(); }, 50);
+    const t2 = window.setTimeout(() => { observeAll(); playAllVisible(); }, 600);
+    const t3 = window.setTimeout(() => { observeAll(); playAllVisible(); }, 1800);
+
+    // First user gesture unlocks strict autoplay policies
+    const onGesture = () => playAllVisible();
+    window.addEventListener("touchstart", onGesture, { passive: true });
+    window.addEventListener("click", onGesture);
+
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") playAllVisible();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      window.cancelAnimationFrame(initial);
-      window.clearTimeout(reobserve);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
       window.removeEventListener("touchstart", onGesture);
       window.removeEventListener("click", onGesture);
       document.removeEventListener("visibilitychange", onVisibility);
