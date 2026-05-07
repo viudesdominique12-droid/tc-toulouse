@@ -2,6 +2,7 @@
 
 import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { asset } from "@/lib/asset";
 
 function AnimatedCounter({
   value,
@@ -64,7 +65,7 @@ export function PhenomeneViral() {
         className="absolute inset-0 -z-10"
       >
         <video
-          src="/videos/pink-cadillac.mp4"
+          src={asset("/videos/pink-cadillac.mp4")}
           autoPlay
           muted
           loop

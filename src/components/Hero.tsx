@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef } from "react";
 import { PalmTree, SunGradient } from "./Decor";
+import { asset } from "@/lib/asset";
 
 export function Hero() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -80,7 +81,7 @@ export function Hero() {
       {/* Facade background — atmospheric, "viens chez nous" */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <img
-          src="/images/facade.png"
+          src={asset("/images/facade.png")}
           alt=""
           aria-hidden
           className="h-full w-full object-cover opacity-50 scale-[1.04]"
@@ -194,7 +195,7 @@ export function Hero() {
           <div className="neon-card aspect-[4/5] sm:aspect-[3/4] lg:aspect-[5/6] relative">
             <video
               ref={videoRef}
-              src="/videos/box-assembly.mp4"
+              src={asset("/videos/box-assembly.mp4")}
               muted
               playsInline
               preload="auto"

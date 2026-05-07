@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
+import { asset } from "@/lib/asset";
 
 export function Footer() {
   const wrap = useRef<HTMLElement>(null);
@@ -24,7 +25,7 @@ export function Footer() {
         className="absolute inset-0 -z-10"
       >
         <video
-          src="/videos/pov-drive.mp4"
+          src={asset("/videos/pov-drive.mp4")}
           autoPlay
           muted
           loop

@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { asset } from "@/lib/asset";
 
 export function TakeARide() {
   const [isMobile, setIsMobile] = useState(false);
@@ -61,7 +62,7 @@ function TakeARideDesktop() {
           className="absolute inset-0"
         >
           <video
-            src="/videos/pink-cadillac.mp4"
+            src={asset("/videos/pink-cadillac.mp4")}
             autoPlay
             muted
             loop
@@ -77,7 +78,7 @@ function TakeARideDesktop() {
           className="absolute inset-0"
         >
           <video
-            src="/videos/pov-drive.mp4"
+            src={asset("/videos/pov-drive.mp4")}
             autoPlay
             muted
             loop
@@ -127,13 +128,13 @@ function PhaseDot({
   to,
   label,
 }: {
-  progress: { get: () => number; on: (e: string, cb: (v: number) => void) => () => void };
+  progress: MotionValue<number>;
   from: number;
   to: number;
   label: string;
 }) {
   const opacity = useTransform(
-    progress as never,
+    progress,
     [from - 0.05, from, to, to + 0.05],
     [0.3, 1, 1, 0.3]
   );
@@ -180,7 +181,7 @@ function TakeARideMobile() {
             className="aspect-video relative overflow-hidden rounded-2xl border border-line"
           >
             <video
-              src="/videos/pink-cadillac.mp4"
+              src={asset("/videos/pink-cadillac.mp4")}
               autoPlay
               muted
               loop
@@ -205,7 +206,7 @@ function TakeARideMobile() {
             className="aspect-video relative overflow-hidden rounded-2xl border border-line"
           >
             <video
-              src="/videos/pov-drive.mp4"
+              src={asset("/videos/pov-drive.mp4")}
               autoPlay
               muted
               loop

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { asset } from "@/lib/asset";
 
 export function ShowcaseProduit() {
   return (
@@ -44,7 +45,7 @@ export function ShowcaseProduit() {
             >
               <div className="aspect-[4/3] relative overflow-hidden bg-ink">
                 <img
-                  src="/images/crousty-product.jpg"
+                  src={asset("/images/crousty-product.jpg")}
                   alt="Le Crousty — riz, poulet pané, sauce, ciboulette"
                   className="absolute inset-0 h-full w-full object-cover"
                 />

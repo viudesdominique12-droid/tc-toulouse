@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { asset } from "@/lib/asset";
 
 const HOURS = [
   { day: "Lun – Jeu", time: "11h30 – 01h50" },
@@ -24,7 +25,7 @@ export function NotreAdresse() {
       {/* Facade image as atmospheric background */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/images/facade.png"
+          src={asset("/images/facade.png")}
           alt=""
           aria-hidden
           className="h-full w-full object-cover opacity-55"
